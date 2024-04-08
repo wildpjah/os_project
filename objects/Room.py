@@ -5,7 +5,7 @@ class Room:
     gold = 0
 
     def __init__(self, name, miner, gamer, gold):
-        self.name
+        self.name = name
         self.miner = miner
         self.gamer = gamer
         self.gold = gold
