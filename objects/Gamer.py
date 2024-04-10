@@ -1,7 +1,7 @@
 class Gamer:
     name = None
     coins = 0
-    in_room = False
+    in_room = None
 
     def __init__(self, name, coins, in_room):
         self.name = name
