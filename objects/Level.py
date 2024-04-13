@@ -4,13 +4,15 @@ class Level:
     miners = []
     gamers = []
 
-    def __init__(self, name, rooms, miners, gamers, rank):
+    def __init__(self, id, name="", rooms=[], miners=[], gamers=[]):
+        self.id = id
         self.name = name
         self.rooms = rooms
         self.miners = miners
         self.gamers = gamers
-        self.rank = rank
 
+    def get_id(self):
+        return self.id
     def get_name(self):
         return self.name
     def get_rooms(self):
@@ -19,7 +21,11 @@ class Level:
         return self.miners
     def get_gamers(self):
         return self.gamers
+    def get_num_rooms(self):
+        return len(rooms)
 
+    def set_id(self, id):
+        self.id = id
     def set_name(self, name):
         self.name = name
     def add_room(self, room):
@@ -30,7 +36,18 @@ class Level:
         self.gamers.append(gamer)
     
     def __str__(self):
-        output = str(self.name) + ": \n\n"
+        output = "\nLevel " + str(self.id) + " " + str(self.name) + ": \n\n" + \
+            "Miners on level: " + str(self.miners) + \
+                "\nGamers on level: " + str(self.gamers) + "\n"
+        for room in self.rooms:
+            output += str(room) + "\n\n"
+        output += "End Of Level"
+        return output
+
+    def __repr__(self):
+        output = "\nLevel " + str(self.id) + " " + str(self.name) + ": \n\n" + \
+            "Miners on level: " + str(self.miners) + \
+                "\nGamers on level: " + str(self.gamers) + "\n"
         for room in self.rooms:
             output += str(room) + "\n\n"
         output += "End Of Level"

@@ -1,12 +1,4 @@
-class Gamer:
-    name = None
-    coins = 0
-    in_room = None
-
-    def __init__(self, name, coins, in_room):
-        self.name = name
-        self.coins = coins
-        self.in_room = in_room
-
-    def __str__(self):
-        return self.name + ": {coins: " + str(self.coins) + ", In Room: " + str(self.in_room) + "}"
+from .Person import Person
+class Gamer(Person):
+    def __init__(self, id, name, coins=0, room=None):
+        super().__init__(id, name, coins, room)
