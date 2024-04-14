@@ -41,4 +41,4 @@ class Person(ABC):
         self.game = game
     
     def add_coins(self, coins):
-        self.coins += coins
+        self.coins = self.coins + coins

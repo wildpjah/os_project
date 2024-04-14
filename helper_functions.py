@@ -66,8 +66,8 @@ def NewGame(num_levels, num_rooms, num_gamers, num_miners):
     for i in range(1, num_miners + 1):
         miners.append(Miner(g, i, "Miner"))
     g.set_levels(levels)
-    g.set_miners(rooms)
-    g.set_miners(gamers)
+    g.set_rooms(rooms)
+    g.set_gamers(gamers)
     g.set_miners(miners)
     g.set_occ_m(occ_m)
     g.set_un_occ_m(un_occ_m)

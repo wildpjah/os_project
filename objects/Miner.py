@@ -10,7 +10,7 @@ class Miner(Person):
             self.room.set_miner = None
             self.game.rm_occ_m(self.room)
         self.room = room
-        room.set_miner = self
+        room.set_miner(self)
         self.game.add_occ_m(room)
     def find_room(self):
         options = self.game.get_un_occ_m()

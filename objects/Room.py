@@ -11,13 +11,13 @@ class Room():
     
     def get_id(self):
         return self.id
-    def get_name():
+    def get_name(self):
         return self.name
-    def get_miner():
+    def get_miner(self):
         return self.miner
-    def get_gamer():
+    def get_gamer(self):
         return self.gamer
-    def get_coins():
+    def get_coins(self):
         return self.coins
     def get_game(self):
         return self.game
@@ -38,15 +38,27 @@ class Room():
 
 
     def __str__(self):
+        m_name = ""
+        g_name = ""
+        if self.miner != None:
+            m_name = self.miner.get_name()
+        if self.gamer != None:
+            g_name = self.gamer.get_name()
         output = "Room " + str(self.id) + ", " + str(self.name) + ":"\
-            "\nminer in room: " + str(self.miner) + \
-            "\ngamer in room: " + str(self.gamer) + \
-            "\ngold in room: " + str(self.coins)
+            "\nminer in room: " + str(m_name) + \
+            "\ngamer in room: " + str(g_name) + \
+            "\ncoins in room: " + str(self.coins)
         return output
 
     def __repr__(self):
+        m_name = ""
+        g_name = ""
+        if self.miner != None:
+            m_name = self.miner.get_name()
+        if self.gamer != None:
+            g_name = self.gamer.get_name()
         output = str(self.name) + ":"\
-            "\nminer in room: " + str(self.miner) + \
-            "\ngamer in room: " + str(self.gamer) + \
-            "\ngold in room: " + str(self.coins)
+            "\nminer in room: " + str(m_name) + \
+            "\ngamer in room: " + str(m_name) + \
+            "\ncoins in room: " + str(self.coins)
         return output

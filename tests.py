@@ -31,22 +31,22 @@ def TestMinerFunctionality():
 
 def TestGamerFunctionality():
     g = hf.NewGame(2, 2, 1, 1)
-    for room in g.get_rooms:
+    for room in g.get_rooms():
         room.set_coins(random.randint(0,50))
+        print(room.get_coins())
     gamer = g.get_gamers()[0]
     room = gamer.find_room()
     print("\n" + str(room))
     gamer.enter_room(room)
     gamer.collect()
     print("\n" + str(room))
-    print("\n" + str(m))
+    print("\n" + str(gamer))
     print("\n" + str(g.get_occ_g()))
     
-    gamer.find_room()
-    gamer.enter_room()
+    gamer.enter_room(gamer.find_room())
     print("\n" + str(room))
-    print("\n" + str(m))
+    print("\n" + str(gamer))
     print("\n" + str(g.get_occ_g()))
 
 
-TestMinerFunctionality()
+TestGamerFunctionality()
