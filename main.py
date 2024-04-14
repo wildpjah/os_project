@@ -1,3 +1,4 @@
+from objects.Game import Game
 from objects.Person import Person
 from objects.Miner import Miner
 from objects.Gamer import Gamer
@@ -50,38 +51,16 @@ def main2():
 
 
 def main():
-    # initialize amounts
-    num_levels = 10
-    # number of rooms is per level
-    num_rooms = 3
-    num_gamers = 10
-    num_miners = 20
-    # levels holds all levels in order of progression. order of other lists does not matter.
-    levels = []
-    rooms = []
-    gamers = []
-    miners = []
+    g = hf.NewGame(10,3,10,20)
 
-    # initialize Levels and Rooms
-    for i in range(1, num_levels + 1):
-        # create a new level and append it to the array
-        new_level = Level(i, hf.GetRandomName())
-        levels.append(new_level)
-        # initialize Rooms and put them in our level too
-        for i in range(1, num_rooms + 1):
-            new_level.add_room(Room(i, "Room"))
-    
-    # initialize Gamers in level 1
-    for i in range(1, num_gamers + 1):
-        new_gamer = Gamer(i, "Gamer")
-        gamers.append(new_gamer)
-        levels[0].add_gamer(new_gamer)
-    
-    # initialize Miners
-    for i in range(1, num_miners + 1):
-        miners.append(Miner(i, "Miner"))
-    print(levels[0])
     # run gamers in parallel and miners in parallel
+        # First We will just go through the gameplay loops of each type of Person.
+        #Start with Miners since Gamers need the coins to do anything.
+    #Miner:
+    # First we would create a thread for this miner. I will skip that for right now.
+    # I will do the rest of the actions assuming they will be performed in a loop in a dedicated thread.
+    #First it will pick a room to go to.
+
 
     #for t in range(1, 1000):
 
