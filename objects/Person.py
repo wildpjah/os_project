@@ -1,9 +1,11 @@
+from .Game import Game
 class Person:
-    def __init__(self, id, name, coins=0, room=None):
+    def __init__(self, game, id, name, coins=0, room=None):
         self.id = id
         self.name = name
         self.coins = coins
         self.room = room
+        self.game = game
 
     def __repr__(self):
         return type(self).__name__ + " " + str(self.id) + ", " + self.name + ": {coins:" + str(self.coins) + ", In Room: " + str(self.room) + "}"
@@ -18,6 +20,8 @@ class Person:
         return self.coins
     def get_room(self):
         return self.room
+    def get_game(self):
+        return self.game
 
     def set_name(self, name):
         self.name = name
@@ -25,5 +29,6 @@ class Person:
         self.coins = coins
     def set_room(self, room):
         self.room = room
-    
+    def set_game(self, game):
+        self.game = game
     

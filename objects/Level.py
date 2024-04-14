@@ -1,15 +1,17 @@
-class Level:
+from .Game import Game
+class Level(Game):
     name = None
     rooms = []
     miners = []
     gamers = []
 
-    def __init__(self, id, name="", rooms=[], miners=[], gamers=[]):
+    def __init__(self, game, id, name="", rooms=[], miners=[], gamers=[]):
         self.id = id
         self.name = name
         self.rooms = rooms
         self.miners = miners
         self.gamers = gamers
+        self.game = game
 
     def get_id(self):
         return self.id
@@ -23,6 +25,8 @@ class Level:
         return self.gamers
     def get_num_rooms(self):
         return len(rooms)
+    def get_game(self):
+        return self.game
 
     def set_id(self, id):
         self.id = id
@@ -36,7 +40,7 @@ class Level:
         self.gamers.append(gamer)
     
     def __str__(self):
-        output = "\nLevel " + str(self.id) + " " + str(self.name) + ": \n\n" + \
+        output = "\nGame " + self.game.getName() + ", Level " + str(self.id) + " " + str(self.name) + ": \n\n" + \
             "Miners on level: " + str(self.miners) + \
                 "\nGamers on level: " + str(self.gamers) + "\n"
         for room in self.rooms:
@@ -45,7 +49,7 @@ class Level:
         return output
 
     def __repr__(self):
-        output = "\nLevel " + str(self.id) + " " + str(self.name) + ": \n\n" + \
+        output = "\nGame " + self.game.get_name() + ", Level " + str(self.id) + " " + str(self.name) + ": \n\n" + \
             "Miners on level: " + str(self.miners) + \
                 "\nGamers on level: " + str(self.gamers) + "\n"
         for room in self.rooms:

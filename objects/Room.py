@@ -1,15 +1,17 @@
+from .Game import Game
 class Room():
     name = None
     miner = None
     gamer = None
     gold = 0
 
-    def __init__(self, id, name, miner=None, gamer=None, gold=0):
+    def __init__(self, game, id, name, miner=None, gamer=None, gold=0):
         self.id = id
         self.name = name
         self.miner = miner
         self.gamer = gamer
         self.gold = gold
+        self.game = game
     
     def get_id(self):
         return self.id
@@ -21,6 +23,8 @@ class Room():
         return gamer
     def get_gold():
         return gold
+    def get_game(self):
+        return self.game
 
     def set_id(self, id):
         self.id = id
