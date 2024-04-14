@@ -1,28 +1,24 @@
 from .Game import Game
 class Room():
-    name = None
-    miner = None
-    gamer = None
-    gold = 0
 
-    def __init__(self, game, id, name, miner=None, gamer=None, gold=0):
+    def __init__(self, game, id, name, miner=None, gamer=None, coins=0):
         self.id = id
         self.name = name
         self.miner = miner
         self.gamer = gamer
-        self.gold = gold
+        self.coins = coins
         self.game = game
     
     def get_id(self):
         return self.id
     def get_name():
-        return name
+        return self.name
     def get_miner():
-        return miner
+        return self.miner
     def get_gamer():
-        return gamer
-    def get_gold():
-        return gold
+        return self.gamer
+    def get_coins():
+        return self.coins
     def get_game(self):
         return self.game
 
@@ -34,22 +30,23 @@ class Room():
         self.miner = miner
     def set_gamer(self, gamer):
         self.gamer = gamer
-    def set_gold(self, gold):
-        self.id = gold
+    def set_coins(self, coins):
+        self.coins = coins
 
-
+    def add_coins(self, coins):
+        self.coins += coins
 
 
     def __str__(self):
         output = "Room " + str(self.id) + ", " + str(self.name) + ":"\
             "\nminer in room: " + str(self.miner) + \
             "\ngamer in room: " + str(self.gamer) + \
-            "\ngold in room: " + str(self.gold)
+            "\ngold in room: " + str(self.coins)
         return output
 
     def __repr__(self):
         output = str(self.name) + ":"\
             "\nminer in room: " + str(self.miner) + \
             "\ngamer in room: " + str(self.gamer) + \
-            "\ngold in room: " + str(self.gold)
+            "\ngold in room: " + str(self.coins)
         return output

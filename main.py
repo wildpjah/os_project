@@ -51,6 +51,7 @@ def main2():
 
 
 def main():
+    random.seed()
     g = hf.NewGame(10,3,10,20)
 
     # run gamers in parallel and miners in parallel

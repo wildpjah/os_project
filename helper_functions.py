@@ -40,8 +40,10 @@ def NewGame(num_levels, num_rooms, num_gamers, num_miners):
     gamers = []
     miners = []
     #list of occupied and unoccupied rooms
-    occ = []
-    un_occ = []
+    occ_m = []
+    occ_g = []
+    un_occ_m = []
+    un_occ_g = []
 
     # initialize Levels and Rooms
     for i in range(1, num_levels + 1):
@@ -52,7 +54,8 @@ def NewGame(num_levels, num_rooms, num_gamers, num_miners):
         for i in range(1, num_rooms + 1):
             new_room = Room(g, i, "Room", None, None, 0)
             new_level.add_room(new_room)
-            un_occ.append(new_room)
+            un_occ_m.append(new_room)
+            un_occ_g.append(new_room)
     # initialize Gamers in level 1
     for i in range(1, num_gamers + 1):
         new_gamer = Gamer(g, i, "Gamer")
@@ -62,9 +65,12 @@ def NewGame(num_levels, num_rooms, num_gamers, num_miners):
     # initialize Miners
     for i in range(1, num_miners + 1):
         miners.append(Miner(g, i, "Miner"))
-    print(levels)
     g.set_levels(levels)
     g.set_miners(rooms)
     g.set_miners(gamers)
     g.set_miners(miners)
+    g.set_occ_m(occ_m)
+    g.set_un_occ_m(un_occ_m)
+    g.set_occ_g(occ_g)
+    g.set_un_occ_g(un_occ_g)
     return g

@@ -2,8 +2,10 @@ from objects.Gamer import Gamer
 from objects.Miner import Miner
 from objects.Room import Room
 from objects.Level import Level
+import helper_functions as hf
 
 def TestClassFunctionality():
+    # deprecated
     new_miner = Miner("m1", 10, None)
     new_gamer = Gamer("g1", 2, None)
     new_room = Room("r1", new_miner, new_gamer, 5)
@@ -11,4 +13,40 @@ def TestClassFunctionality():
     new_level.set_name("frank")
     print(str(new_level))
 
-TestClassFunctionality()
+def TestMinerFunctionality():
+    g = hf.NewGame(2,2,1,1)
+    miners = g.get_miners()
+    m = miners[0]
+    room = m.find_room()
+    m.enter_room(room)
+    m.drop_coins()
+    print("\n" + str(room))
+    print("\n" + str(m))
+    print("\n" + str(g.get_occ_m()))
+    room = m.find_room()
+    m.enter_room(room)
+    print("\n" + str(room))
+    print("\n" + str(m))
+    print("\n" + str(g.get_occ_m()))
+
+def TestGamerFunctionality():
+    g = hf.NewGame(2, 2, 1, 1)
+    for room in g.get_rooms:
+        room.set_coins(random.randint(0,50))
+    gamer = g.get_gamers()[0]
+    room = gamer.find_room()
+    print("\n" + str(room))
+    gamer.enter_room(room)
+    gamer.collect()
+    print("\n" + str(room))
+    print("\n" + str(m))
+    print("\n" + str(g.get_occ_g()))
+    
+    gamer.find_room()
+    gamer.enter_room()
+    print("\n" + str(room))
+    print("\n" + str(m))
+    print("\n" + str(g.get_occ_g()))
+
+
+TestMinerFunctionality()

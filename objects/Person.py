@@ -1,5 +1,6 @@
+from abc import ABC, abstractmethod
 from .Game import Game
-class Person:
+class Person(ABC):
     def __init__(self, game, id, name, coins=0, room=None):
         self.id = id
         self.name = name
@@ -7,16 +8,23 @@ class Person:
         self.room = room
         self.game = game
 
+    @abstractmethod
+    def find_room(self):
+        pass
+    @abstractmethod
+    def enter_room(self, room):
+        pass
+
     def __repr__(self):
         return type(self).__name__ + " " + str(self.id) + ", " + self.name + ": {coins:" + str(self.coins) + ", In Room: " + str(self.room) + "}"
 
     def __str__(self):
-        return slef.__class__ + " " + str(self.id) + ", " + self.name + ": {coins:" + str(self.coins) + ", In Room: " + str(self.room) + "}"
+        return str(self.__class__) + " " + str(self.id) + ", " + self.name + ": {coins:" + str(self.coins) + ", In Room: " + str(self.room) + "}"
 
 
     def get_name(self):
         return self.name
-    def get_Coins(self):
+    def get_coins(self):
         return self.coins
     def get_room(self):
         return self.room
@@ -32,3 +40,5 @@ class Person:
     def set_game(self, game):
         self.game = game
     
+    def add_coins(self, coins):
+        self.coins += coins
