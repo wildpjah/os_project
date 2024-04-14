@@ -1,3 +1,4 @@
+from objects.Game import Game
 from objects.Gamer import Gamer
 from objects.Miner import Miner
 from objects.Room import Room
@@ -26,7 +27,7 @@ def GetRandomName():
     return "Level"
 
 def NewGame(num_levels, num_rooms, num_gamers, num_miners):
-    g = Game()
+    g = Game("Bruh")
     # initialize amounts
     num_levels = num_levels
     # number of rooms is per level
@@ -45,7 +46,7 @@ def NewGame(num_levels, num_rooms, num_gamers, num_miners):
     # initialize Levels and Rooms
     for i in range(1, num_levels + 1):
         # create a new level and append it to the array
-        new_level = Level(g, i, hf.GetRandomName(), [], [], [])
+        new_level = Level(g, i, GetRandomName(), [], [], [])
         levels.append(new_level)
         # initialize Rooms and put them in our level too
         for i in range(1, num_rooms + 1):
