@@ -3,6 +3,7 @@ from objects.Miner import Miner
 from objects.Room import Room
 from objects.Level import Level
 import helper_functions as hf
+import random
 
 def TestClassFunctionality():
     # deprecated
@@ -39,14 +40,10 @@ def TestGamerFunctionality():
     print("\n" + str(room))
     gamer.enter_room(room)
     gamer.collect()
-    print("\n" + str(room))
-    print("\n" + str(gamer))
-    print("\n" + str(g.get_occ_g()))
-    
+    print(g.get_levels())
     gamer.enter_room(gamer.find_room())
-    print("\n" + str(room))
-    print("\n" + str(gamer))
-    print("\n" + str(g.get_occ_g()))
+    print("############################")
+    print(g.get_levels())
 
 
 TestGamerFunctionality()

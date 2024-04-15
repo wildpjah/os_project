@@ -68,3 +68,10 @@ class Game:
         self.un_occ_g.append(room)
     def rm_un_occ_g(self, room):
         self.un_occ_g.remove(room)
+
+
+    def gamer_by_level(self, gamer):
+        for level in self.levels:
+            if gamer in level.get_gamers():
+                return level
+        return None
