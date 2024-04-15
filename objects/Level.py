@@ -1,10 +1,5 @@
 from .Game import Game
 class Level(Game):
-    name = None
-    rooms = []
-    miners = []
-    gamers = []
-
     def __init__(self, game, id, name="", rooms=[], miners=[], gamers=[]):
         self.id = id
         self.name = name

@@ -11,6 +11,7 @@ class Game:
         self.occ_g = occ_g
         self.un_occ_g = un_occ_g
         self.name = name
+        self.won = False
 
     def get_occ_m(self):
         return self.occ_m
@@ -46,7 +47,10 @@ class Game:
     def set_rooms(self, r):
         self.rooms = r
     def set_gamers(self, g):
-        self.gamers = g
+        if g != None:
+            self.gamers = g
+        else:
+            self.gamers = []
     def set_miners(self, m):
         self.miners = m
 
@@ -70,8 +74,15 @@ class Game:
         self.un_occ_g.remove(room)
 
 
-    def gamer_by_level(self, gamer):
+    def check_win(self):
+        return self.won
+    def win(self, gamer):
+        self.won = True
+        print(str(gamer.get_name()) + " Has Won The Game!")
+
+
+    def level_from_gamer(self, gamer):
         for level in self.levels:
-            if gamer in level.get_gamers():
+            if level.get_gamers() != None and gamer in level.get_gamers():
                 return level
         return None

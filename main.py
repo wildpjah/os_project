@@ -5,6 +5,7 @@ from objects.Gamer import Gamer
 from objects.Room import Room
 from objects.Level import Level
 import helper_functions as hf
+import threading
 
 
 def main2():

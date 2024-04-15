@@ -75,3 +75,9 @@ def NewGame(num_levels, num_rooms, num_gamers, num_miners):
     g.set_occ_g(occ_g)
     g.set_un_occ_g(un_occ_g)
     return g
+                
+                
+
+    def DeclareVictory(gamer):
+        print(str(gamer) + "\nFIRST PLACE VICTORY")
+        print("******************************")

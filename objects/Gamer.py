@@ -8,14 +8,14 @@ class Gamer(Person):
     def enter_room(self, room):
         old_room = self.room
         if self.room != None:
-            self.room.set_gamer(None)
-            self.game.rm_occ_g(self.room)
+            self.leave_room()
         self.room = room
         room.set_gamer(self)
         self.game.add_occ_g(room)
     def find_room(self):
         un_occ = self.game.get_un_occ_g()
-        rooms = (self.game.gamer_by_level(self)).get_rooms()
+        level = self.game.level_from_gamer(self)
+        rooms = (level).get_rooms()
         options = []
         for room in rooms:
             if room in un_occ:
@@ -29,3 +29,43 @@ class Gamer(Person):
         if self.room != None:
             self.add_coins(self.room.get_coins())
             r.set_coins(0)
+    def leave_room(self):
+        r = self.room
+        r.set_gamer(None)
+        self.game.rm_occ_g(r)
+        self.room = None
+
+
+    def level_up(self):
+        # check for level up condition
+        g = self.game
+        if self.coins >= 20:
+            # did we just win the last level?
+            level = g.level_from_gamer(self)
+            all_levels = g.get_levels()
+            num_l = len(g.get_levels())
+            if level == all_levels[num_l-1]:
+                self.game.win(self)
+            else:
+                # level up
+                self.coins = 0
+                if self.room != None:
+                    self.leave_room()
+                level_gamers = level.get_gamers()
+                new_level_gamers = level_gamers.remove(self)
+                level.set_gamers(new_level_gamers)
+                i = all_levels.index(level)
+                new_level = all_levels[i+1]
+                level_gamers = new_level.get_gamers()
+                level_gamers.append(self)
+                new_level.set_gamers(level_gamers)
+
+
+
+    def loop(self, t):
+        i=0
+        while(self.game.check_win() == False and i<t):
+            self.enter_room(self.find_room())
+            self.collect()
+            self.level_up()
+            i = i + 1

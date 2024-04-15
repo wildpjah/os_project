@@ -4,6 +4,7 @@ from objects.Room import Room
 from objects.Level import Level
 import helper_functions as hf
 import random
+import threading
 
 def TestClassFunctionality():
     # deprecated
@@ -33,17 +34,20 @@ def TestMinerFunctionality():
 def TestGamerFunctionality():
     g = hf.NewGame(2, 2, 1, 1)
     for room in g.get_rooms():
-        room.set_coins(random.randint(0,50))
-        print(room.get_coins())
+        room.set_coins(random.randint(20,50))
     gamer = g.get_gamers()[0]
-    room = gamer.find_room()
-    print("\n" + str(room))
-    gamer.enter_room(room)
-    gamer.collect()
-    print(g.get_levels())
-    gamer.enter_room(gamer.find_room())
-    print("############################")
-    print(g.get_levels())
+    gamer.loop(10)
+
+def ThreadingTest():
+    g = hf.NewGame(2, 2, 1, 1)
+    gamer = g.get_gamers()[0]
+    m = g.get_miners()[0]
+    # t1 = threading.Thread(target=m.loop(), args)
+    t2 = threading.Thread(target, args)
+
+    t1.join()
+    t2.join()
+
 
 
 TestGamerFunctionality()
