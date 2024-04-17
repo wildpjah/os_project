@@ -86,3 +86,10 @@ class Game:
             if level.get_gamers() != None and gamer in level.get_gamers():
                 return level
         return None
+
+
+    def print_coins_per_room(self):
+        for level in self.get_levels():
+            print("level " +  str(level.get_id()))
+            for room in level.get_rooms():
+                print(str(room.get_coins()))
