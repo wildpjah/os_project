@@ -54,22 +54,18 @@ def main2():
 def main():
     random.seed()
     g = hf.NewGame(10,3,10,20)
+    gamers = g.get_gamers()
+    miners = g.get_miners()
+    tasks = []
 
-    # run gamers in parallel and miners in parallel
-        # First We will just go through the gameplay loops of each type of Person.
-        #Start with Miners since Gamers need the coins to do anything.
-    #Miner:
-    # First we would create a thread for this miner. I will skip that for right now.
-    # I will do the rest of the actions assuming they will be performed in a loop in a dedicated thread.
-    #First it will pick a room to go to.
+    # Create tasks for miners and gamers
+    for miner in miners:
+        tasks.append(asyncio.create_task(miner.loop_for_win()))
+    for gamer in gamers:
+        tasks.append(asyncio.create_task(gamer.loop_for_win()))
 
-
-    #for t in range(1, 1000):
-
-
-
-
-
+    # Wait for all tasks to complete
+    await asyncio.gather(*tasks)
 
 if __name__ == "__main__":
     main()
