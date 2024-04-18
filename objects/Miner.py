@@ -78,13 +78,11 @@ class Miner(Person):
         print("miner loop end *****************************")
         print(i)
     
-    def loop_for_win(self):
+    async def loop_for_win(self):
         while(self.game.check_win() == False):
-            print("m")
-            self.enter_room(self.find_room())
-            self.drop_coins()
+            await self.enter_room(self.find_room())
+            await self.drop_coins()
 
-    def loop_one(self):
-        print(self)
-        self.enter_room(self.find_room())
-        self.drop_coins()
+    async def loop_one(self):
+        await self.enter_room(self.find_room())
+        await self.drop_coins()

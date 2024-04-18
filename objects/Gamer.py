@@ -91,7 +91,7 @@ class Gamer(Person):
         start = 0
         end = 0
         change = 0
-        await asyncio.sleep(10)
+        await asyncio.sleep(2)
         while(self.game.check_win() == False and i<t):
             await asyncio.sleep(0)
             print("Gamer " + str(self.get_id()) + " execution " + str(i) + " START")
@@ -114,7 +114,7 @@ class Gamer(Person):
             await self.collect()
             self.level_up()
 
-    def loop_one(self):
+    async def loop_one(self):
         await asyncio.sleep(0)
         await self.enter_room(self.find_room())
         await self.collect()
