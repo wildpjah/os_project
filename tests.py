@@ -98,15 +98,38 @@ async def ThreadingTest5():
     await asyncio.gather(miner_task, gamer_task)
 
 async def ThreadingTest6():
-    g = hf.NewGame(2, 2, 1, 1)
+    g = hf.NewGame(2, 2, 2, 2)
     gamers = g.get_gamers()
     miners = g.get_miners()
+    m_tasks = []
+    g_tasks = []
 
     # Start concurrent execution of miner and gamer tasks
-    miner_tasks = [miner.loop_for_t(200) for miner in miners]
-    gamer_tasks = [gamer.loop_for_t(200) for gamer in gamers]
+    for miner in miners:
+        m_tasks.append(miner.loop_for_t(200))
+    await asyncio.sleep(10)
+    for gamer in gamers:
+        g_tasks.append(gamer.loop_for_t(200))
 
     # Wait for all tasks to complete
-    await asyncio.gather(*miner_tasks, *gamer_tasks)
+    await asyncio.gather(*m_tasks, *g_tasks)
 
-asyncio.run(ThreadingTest6())
+
+async def ThreadingTest7():
+    g = hf.NewGame(10,3,10,20)
+    gamers = g.get_gamers()
+    miners = g.get_miners()
+    tasks = []
+
+    # Create tasks for miners and gamers
+    for miner in miners:
+        tasks.append(asyncio.create_task(miner.loop_for_t(5)))
+    for gamer in gamers:
+        tasks.append(asyncio.create_task(gamer.loop_for_t(5)))
+
+    # Wait for all tasks to complete
+    await asyncio.gather(*tasks)
+
+
+
+asyncio.run(ThreadingTest7())

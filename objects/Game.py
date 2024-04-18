@@ -78,12 +78,18 @@ class Game:
         return self.won
     def win(self, gamer):
         self.won = True
-        print(str(gamer.get_name()) + " Has Won The Game!")
+        print("Gamer " + str(gamer.get_id()) + ", " + str(gamer.get_name()) + ", Has Won The Game!")
 
 
     def level_from_gamer(self, gamer):
         for level in self.levels:
             if level.get_gamers() != None and gamer in level.get_gamers():
+                return level
+        return None
+
+    def level_from_room(self, room):
+        for level in self.levels:
+            if level.get_rooms() != None and room in level.get_rooms():
                 return level
         return None
 

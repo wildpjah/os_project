@@ -30,6 +30,8 @@ class Person(ABC):
         return self.room
     def get_game(self):
         return self.game
+    def get_id(self):
+        return self.id
 
     def set_name(self, name):
         self.name = name
