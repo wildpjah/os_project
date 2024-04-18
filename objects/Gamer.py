@@ -2,6 +2,7 @@ from .Game import Game
 from .Person import Person
 import random
 import time
+import asyncio
 class Gamer(Person):
     def __init__(self, game, id, name, coins=0, room=None):
         super().__init__(game, id, name, coins, room)
@@ -63,13 +64,18 @@ class Gamer(Person):
 
 
 
-    def loop_for_t(self, t):
+    async def loop_for_t(self, t):
+        print("GAMER loop start *************************************")
         i=0
         while(self.game.check_win() == False and i<t):
+            await asyncio.sleep(0)
             self.enter_room(self.find_room())
             self.collect()
             self.level_up()
             i = i + 1
+            print("GAMER execution" + str(i))
+        print("GAMER loop end *****************************")
+        print(i)
 
     def loop_for_win(self):
         while(self.game.check_win() == False):

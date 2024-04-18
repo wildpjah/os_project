@@ -6,6 +6,8 @@ import helper_functions as hf
 import random
 import threading
 import concurrent.futures
+import multiprocessing
+import asyncio
 
 def TestClassFunctionality():
     # deprecated
@@ -34,7 +36,7 @@ def ThreadingTest():
     gamer = g.get_gamers()[0]
     miners = g.get_miners()
 
-    m_pool = concurrent.futures.ThreadPoolExecutor(max_workers=len(g.get_miners() + g.get_gamers()))
+    m_pool = concurrent.futures.ThreadPoolExecutor(max_workers=len(g.get_miners() + g.get_gamers() + 1))
     #gamer_pool = concurrent.futures.ThreadPoolExecutor(max_workers=len(g.get_gamers()))
     for miner in miners:
         m_pool.submit(miner.loop_for_win())
@@ -56,41 +58,55 @@ def ThreadingTest2():
     gamers = g.get_gamers()
     miners = g.get_miners()
 
-    while g.check_win() == False:
-        m_pool = concurrent.futures.ThreadPoolExecutor(max_workers=8)
-        #gamer_pool = concurrent.futures.ThreadPoolExecutor(max_workers=len(g.get_gamers()))
-        m_pool.submit(miners[0].loop_one())
-        m_pool.submit(gamers[0].loop_one())
-        #g_pool.shutdown(wait=True)
-        m_pool.shutdown(wait=True)
+    m_pool = concurrent.futures.ProcessPoolExecutor(max_workers=16)
+    #gamer_pool = concurrent.futures.ThreadPoolExecutor(max_workers=len(g.get_gamers()))
+    m_pool.submit(miners[0].loop_for_t(200))
+    m_pool.submit(gamers[0].loop_for_t(200))
+    #g_pool.shutdown(wait=True)
+    m_pool.shutdown(wait=True)
 
+def ThreadingTest3():
+    g = hf.NewGame(2, 2, 1, 1)
+    gamers = g.get_gamers()
+    miners = g.get_miners()
 
-def ThreadingExample():
-    URLS = ['http://www.foxnews.com/',
-        'http://www.cnn.com/',
-        'http://europe.wsj.com/',
-        'http://www.bbc.co.uk/',
-        'http://nonexistant-subdomain.python.org/']
+    t1 = multiprocessing.Process(target=miners[0].loop_for_t(200), name="miners")
+    t2 = multiprocessing.Process(target=gamers[0].loop_for_t(200), name="gamers")
 
-    # Retrieve a single page and report the URL and contents
-def load_url(url, timeout):
-    with urllib.request.urlopen(url, timeout=timeout) as conn:
-        return conn.read()
+    t2.start()
+    t1.start()
+    t2.join()
+    t1.join()
 
-# We can use a with statement to ensure threads are cleaned up promptly
-    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
-        # Start the load operations and mark each future with its URL
-        future_to_url = {executor.submit(load_url, url, 60): url for url in URLS}
-        for future in concurrent.futures.as_completed(future_to_url):
-            url = future_to_url[future]
-            try:
-                data = future.result()
-            except Exception as exc:
-                print('%r generated an exception: %s' % (url, exc))
-            else:
-                print('%r page is %d bytes' % (url, len(data)))
+def ThreadingTest4():
+    g = hf.NewGame(2, 2, 1, 1)
+    gamers = g.get_gamers()
+    miners = g.get_miners()
 
+    with concurrent.futures.ProcessPoolExecutor(max_workers=None) as pool:
+        pool.submit(miners[0].loop_for_t(200))
+        pool.submit(gamers[0].loop_for_t(200))
 
+async def ThreadingTest5():
+    g = hf.NewGame(2, 2, 1, 1)
+    gamers = g.get_gamers()
+    miners = g.get_miners()
 
+    miner_task = miners[0].loop_for_t(200)
+    gamer_task = gamers[0].loop_for_t(200)
 
-ThreadingTest2()
+    await asyncio.gather(miner_task, gamer_task)
+
+async def ThreadingTest6():
+    g = hf.NewGame(2, 2, 1, 1)
+    gamers = g.get_gamers()
+    miners = g.get_miners()
+
+    # Start concurrent execution of miner and gamer tasks
+    miner_tasks = [miner.loop_for_t(200) for miner in miners]
+    gamer_tasks = [gamer.loop_for_t(200) for gamer in gamers]
+
+    # Wait for all tasks to complete
+    await asyncio.gather(*miner_tasks, *gamer_tasks)
+
+asyncio.run(ThreadingTest6())

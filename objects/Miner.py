@@ -2,6 +2,7 @@ from .Game import Game
 from .Person import Person
 import random
 import time
+import asyncio
 class Miner(Person):
     def __init__(self, game, id, name, coins=0, room=None):
         super().__init__(game, id, name, coins, room)
@@ -49,12 +50,17 @@ class Miner(Person):
         self.set_coins(0)
 
 
-    def loop_for_t(self, t):
+    async def loop_for_t(self, t):
+        print("miner loop start *************************************")
         i=0
         while(self.game.check_win() == False and i<t):
+            await asyncio.sleep(0)
             self.enter_room(self.find_room())
             self.drop_coins()
             i = i + 1
+            print("miner execution" + str(i))
+        print("miner loop end *****************************")
+        print(i)
     
     def loop_for_win(self):
         while(self.game.check_win() == False):
