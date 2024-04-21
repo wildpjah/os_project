@@ -6,21 +6,19 @@ class Gamer(Person):
     def __init__(self, game, id, name, coins=0, room=None,):
         super().__init__(game, id, name, coins, room)
         self.time = 10
-        self.lock = asyncio.Lock()
 
     async def enter_room(self, room):
-        async with self.lock:
-            old_room = self.room
-            if self.room != None:
-                self.leave_room()
-            if room is None:
-                pass
-            else:
-                self.room = room
-                room.set_gamer(self)
-                self.game.add_occ_g(room)
-                self.game.rm_un_occ_g(room)
-                asyncio.sleep(1/100)
+        old_room = self.room
+        if self.room != None:
+            self.leave_room()
+        if room is None:
+            pass
+        else:
+            self.room = room
+            room.set_gamer(self)
+            self.game.add_occ_g(room)
+            self.game.rm_un_occ_g(room)
+            asyncio.sleep(1/100)
 
     def find_room(self):
         un_occ = self.game.get_un_occ_g()

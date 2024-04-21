@@ -1,4 +1,5 @@
 from .Game import Game
+import asyncio
 class Room():
 
     def __init__(self, game, id, name, miner=None, gamer=None, coins=0):
@@ -8,6 +9,7 @@ class Room():
         self.gamer = gamer
         self.coins = coins
         self.game = game
+        self.lock = asyncio.Lock()
     
     def get_id(self):
         return self.id

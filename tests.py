@@ -132,4 +132,57 @@ async def ThreadingTest7():
 
 
 
-asyncio.run(ThreadingTest7())
+asyncio.run(ThreadingTest6())
+
+
+
+
+
+
+
+
+
+
+
+
+import asyncio
+
+class Room:
+    def __init__(self):
+        self._miners_inside = set()
+        self._lock = asyncio.Lock()  # Each room has its own lock
+
+    async def enter(self, miner):
+        self._miners_inside.add(miner)
+        print(f"{miner} entered {self}")
+
+    async def leave(self, miner):
+        self._miners_inside.remove(miner)
+        print(f"{miner} left {self}")
+
+class Miner:
+    def __init__(self, name):
+        self.name = name
+
+    async def enter_room(self, room):
+        async with room._lock:
+            await room.enter(self)
+
+    async def leave_room(self, room):
+        async with room._lock:
+            await room.leave(self)
+
+async def main():
+    room1 = Room()
+    room2 = Room()
+
+    miner1 = Miner("Miner 1")
+    miner2 = Miner("Miner 2")
+
+    await asyncio.gather(
+        miner1.enter_room(room1),
+        miner2.enter_room(room1),  # Miner 2 enters the same room concurrently
+        miner1.leave_room(room1)   # Miner 1 leaves the room
+    )
+
+asyncio.run(main())
