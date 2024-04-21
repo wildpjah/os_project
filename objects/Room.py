@@ -33,6 +33,7 @@ class Room():
     def set_coins(self, coins):
         self.coins = coins
 
+
     def add_coins(self, coins):
         self.coins += coins
 

@@ -1,5 +1,6 @@
 from .Game import Game
 class Level(Game):
+    #TODO This class should not extend game. Not "is-a" game.
     def __init__(self, game, id, name="", rooms=[], miners=[], gamers=[]):
         self.id = id
         self.name = name
