@@ -64,6 +64,7 @@ def main():
     for gamer in gamers:
         tasks.append(asyncio.create_task(gamer.loop_for_win()))
 
+    random.shuffle(tasks)
     # Wait for all tasks to complete
     await asyncio.gather(*tasks)
 

@@ -9,7 +9,8 @@ class Room():
         self.gamer = gamer
         self.coins = coins
         self.game = game
-        self.lock = asyncio.Lock()
+        self.m_lock = asyncio.Lock()
+        self.g_lock = asyncio.Lock()
     
     def get_id(self):
         return self.id
@@ -23,6 +24,10 @@ class Room():
         return self.coins
     def get_game(self):
         return self.game
+    def get_m_lock(self):
+        return self.m_lock
+    def get_g_lock(self):
+        return self.g_lock
 
     def set_id(self, id):
         self.id = id
