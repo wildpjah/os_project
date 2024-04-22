@@ -147,6 +147,24 @@ async def ThreadingTest8():
     # Wait for all tasks to complete
     await asyncio.gather(*m_tasks, *g_tasks)
 
+async def ThreadingTest9():
+    random.seed()
+    g = hf.NewGame(10,3,10,20)
+    gamers = g.get_gamers()
+    miners = g.get_miners()
+    tasks = []
+
+    # Create tasks for miners and gamers
+    for miner in miners:
+        tasks.append(asyncio.create_task(miner.loop_for_win()))
+    for gamer in gamers:
+        tasks.append(asyncio.create_task(gamer.loop_for_win()))
+
+    random.shuffle(tasks)
+    # Wait for all tasks to complete
+    await asyncio.gather(*tasks)
+    print("Game Complete")
+
 
 #There's too much text to fit in a terminal so I will put it in a file
 # Save the current stdout so that we can revert sys.stdou after we complete
@@ -154,7 +172,7 @@ async def ThreadingTest8():
 stdout_fileno = sys.stdout
 sys.stdout = open('output.txt', 'w')
 
-asyncio.run(ThreadingTest7())
+asyncio.run(ThreadingTest9())
 
 sys.stdout.close()
 sys.stdout = stdout_fileno

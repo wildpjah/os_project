@@ -36,7 +36,7 @@ def NewGame(num_levels, num_rooms, num_gamers, num_miners):
         levels.append(new_level)
         # initialize Rooms and put them in our level too
         for i in range(1, num_rooms + 1):
-            new_room = Room(g, i, "Room", None, None, 0)
+            new_room = Room(g, i, "Room", new_level, None, None, 0)
             new_level.add_room(new_room)
             rooms.append(new_room)
             un_occ_m.append(new_room)

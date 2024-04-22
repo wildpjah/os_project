@@ -11,17 +11,22 @@ class Gamer(Person):
 
     async def enter_room(self, room):
         old_room = self.room
+        if old_room == room:
+            pass
         if self.room != None:
             await self.leave_room()
         if room is None:
             pass
         else:
-            async with room.get_g_lock():
-                self.room = room
-                room.set_gamer(self)
-                self.game.add_occ_g(room)
-                self.game.rm_un_occ_g(room)
-                await asyncio.sleep(1/100)
+            if room not in self.game.un_occ_g:
+                pass
+            self.room = room
+            room.set_gamer(self)
+            self.game.add_occ_g(room)
+            if room not in self.game.un_occ_g:
+                pass
+            self.game.rm_un_occ_g(room)
+            await asyncio.sleep(1/100)
 
     def find_room(self):
         un_occ = self.game.get_un_occ_g()
@@ -36,30 +41,28 @@ class Gamer(Person):
         r = random.randint(0, len(options)-1)
         return options[r]
     async def collect(self):
-        async with self.room.get_g_lock():
-            r = self.room
-            delay = 0
-            if self.room != None:
-                c = self.room.get_coins()
-                if c <=10:
-                    self.add_coins(c)
-                    r.set_coins(0)
-                    delay = c
-                else:
-                    c = 10
-                    self.add_coins(10)
-                    delay = 10
-                    r.set_coins(c-10)
-            await asyncio.sleep(delay/100)
+        r = self.room
+        delay = 0
+        if self.room != None:
+            c = self.room.get_coins()
+            if c <=10:
+                self.add_coins(c)
+                r.set_coins(0)
+                delay = c
+            else:
+                c = 10
+                self.add_coins(10)
+                delay = 10
+                r.set_coins(c-10)
+        await asyncio.sleep(delay/100)
 
     async def leave_room(self):
-        async with self.room.get_g_lock():
-            r = self.room
-            r.set_gamer(None)
-            self.game.rm_occ_g(r)
-            self.game.add_un_occ_g(r)
-            self.room = None
-            await asyncio.sleep(1/100)
+        r = self.room
+        r.set_gamer(None)
+        self.game.rm_occ_g(r)
+        self.game.add_un_occ_g(r)
+        self.room = None
+        await asyncio.sleep(1/100)
 
 
     def level_up(self):
@@ -104,9 +107,10 @@ class Gamer(Person):
             # Each of these functions is locked individually, but the next one aquires the lock immediately after releasing it
             # This keeps each room locked as long as the gamer is in it
             if r is not None:
-                await self.enter_room(r)
-                await self.collect()
-                await self.leave_room()
+                async with r.get_g_lock():
+                    await self.enter_room(r)
+                    await self.collect()
+                    await self.leave_room()
                 end = self.coins
                 self.level_up()
                 change = end-start
@@ -124,9 +128,10 @@ class Gamer(Person):
         while(self.game.check_win() == False):
             room = self.find_room()
             if room is not None:
-                await self.enter_room(self.find_room())
-                await self.collect()
-                await self.leave_room()
+                async with room.get_g_lock():
+                    await self.enter_room(room)
+                    await self.collect()
+                    await self.leave_room()
             await asyncio.sleep(.5)
             self.level_up()
 
@@ -135,8 +140,9 @@ class Gamer(Person):
         await asyncio.sleep(0)
         room = self.find_room()
         if room is not None:
-            await self.enter_room(self.find_room())
-            await self.collect()
-            await self.leave_room()
+            async with room.get_g_lock():
+                await self.enter_room(room)
+                await self.collect()
+                await self.leave_room()
         await asyncio.sleep(.5)
         self.level_up()

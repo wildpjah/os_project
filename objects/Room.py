@@ -1,8 +1,9 @@
 from .Game import Game
 import asyncio
+from .Level import Level
 class Room():
 
-    def __init__(self, game, id, name, miner=None, gamer=None, coins=0):
+    def __init__(self, game, id, name, level, miner=None, gamer=None, coins=0):
         self.id = id
         self.name = name
         self.miner = miner

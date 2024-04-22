@@ -2,10 +2,12 @@ from objects.Game import Game
 from objects.Person import Person
 from objects.Miner import Miner
 from objects.Gamer import Gamer
-from objects.Room import Room
 from objects.Level import Level
+from objects.Room import Room
 import helper_functions as hf
 import threading
+import asyncio
+import random
 
 
 def main2():
@@ -51,7 +53,7 @@ def main2():
             selected_room.gamer = None
 
 
-def main():
+async def main():
     random.seed()
     g = hf.NewGame(10,3,10,20)
     gamers = g.get_gamers()
@@ -67,6 +69,7 @@ def main():
     random.shuffle(tasks)
     # Wait for all tasks to complete
     await asyncio.gather(*tasks)
+    print("Game Complete")
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
