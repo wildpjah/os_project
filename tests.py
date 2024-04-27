@@ -1,3 +1,4 @@
+from objects.Game import Game
 from objects.Gamer import Gamer
 from objects.Miner import Miner
 from objects.Room import Room
@@ -9,6 +10,11 @@ import concurrent.futures
 import multiprocessing
 import asyncio
 import sys
+
+
+
+
+
 
 def TestClassFunctionality():
     # deprecated
@@ -165,14 +171,53 @@ async def ThreadingTest9():
     await asyncio.gather(*tasks)
     print("Game Complete")
 
+async def AnimationTest1():
+    #initialize game
+    random.seed()
+    g = hf.NewGame(10,3,10,20)
 
-#There's too much text to fit in a terminal so I will put it in a file
+    gamers = g.get_gamers()
+    miners = g.get_miners()
+    tasks = []
+    g.get_rooms()[3].add_coins(6)
+
+    pygame_process = multiprocessing.Process(target=hf.AnimateGame, args=(g,))
+    pygame_process.start()
+    pygame_process.join()
+    g.get_rooms()[4].add_coins(6)
+    
+    for miner in miners:
+        tasks.append(asyncio.create_task(miner.loop_for_t(500)))
+    for gamer in gamers:
+        tasks.append(asyncio.create_task(gamer.loop_for_t(500)))
+
+    random.shuffle(tasks)
+    # Wait for all tasks to complete
+    await asyncio.gather(*tasks)
+    print("Game Complete")
+
+    # # Initialize Pygame
+    # pygame.init()
+
+    # # Set up the display
+    # screen = pygame.display.set_mode((800, 600))
+    # pygame.display.set_caption("Pygame Drawing Example")
+
+
+# Threading Testing!
+# There's too much text to fit in a terminal so I will put it in a file
 # Save the current stdout so that we can revert sys.stdou after we complete
 # our redirection
-stdout_fileno = sys.stdout
-sys.stdout = open('output.txt', 'w')
 
-asyncio.run(ThreadingTest9())
+# stdout_fileno = sys.stdout
+# sys.stdout = open('output.txt', 'w')
 
-sys.stdout.close()
-sys.stdout = stdout_fileno
+# asyncio.run(ThreadingTest9())
+
+# sys.stdout.close()
+# sys.stdout = stdout_fileno
+
+
+# Animation Testing!
+
+asyncio.run(AnimationTest1())

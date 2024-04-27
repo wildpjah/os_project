@@ -83,7 +83,11 @@ class Game:
 
     def level_from_gamer(self, gamer):
         for level in self.levels:
+            print(level)
+            g = level.get_gamers()
+            print(g)
             if level.get_gamers() != None and gamer in level.get_gamers():
+                print(gamer)
                 return level
         return None
 
