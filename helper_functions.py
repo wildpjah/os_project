@@ -28,7 +28,11 @@ def NewGame(num_levels, num_rooms, num_gamers, num_miners):
     manager = MyManager()
     manager.start()
 
-    g = manager.Game("Bruh")
+    #managed game
+    mg = manager.Namespace()
+    #g is the unmanaged class that g is a reference to that will be manipulated by the original process ONLY.
+    g = Game("Bruh")
+    mg.data = g
     # initialize amounts
     num_levels = num_levels
     # number of rooms is per level
@@ -36,37 +40,80 @@ def NewGame(num_levels, num_rooms, num_gamers, num_miners):
     num_gamers = num_gamers
     num_miners = num_miners
     # levels holds all levels in order of progression. order of other lists does not matter.
-    levels = manager.list()
-    rooms = manager.list()
-    gamers = manager.list()
-    miners = manager.list()
+    levels = []
+    rooms = []
+    gamers = []
+    miners = []
     #list of occupied and unoccupied rooms
-    occ_m = manager.list()
-    occ_g = manager.list()
-    un_occ_m = manager.list()
-    un_occ_g = manager.list()
+    occ_m = []
+    occ_g = []
+    un_occ_m = []
+    un_occ_g = []
+
+    #managed verstions of the above
+    # levels holds all levels in order of progression. order of other lists does not matter.
+    mlevels = manager.Namespace()
+    mlevels.data  = levels
+    mrooms = manager.Namespace()
+    mrooms.data = rooms
+    mgamers = manager.Namespace()
+    mgamers.data = gamers
+    mminers = manager.Namespace()
+    mminers.data = miners
+
+    #list of occupied and unoccupied rooms
+    mocc_m = manager.Namespace()
+    mocc_m.data = occ_m
+    mocc_g = manager.Namespace()
+    mocc_g.data = occ_g
+    mun_occ_m = manager.Namespace()
+    mun_occ_m.data = un_occ_m
+    mun_occ_g = manager.Namespace()
+    mun_occ_g.data = un_occ_g
+
 
     # initialize Levels and Rooms
     for i in range(1, num_levels + 1):
         # create a new level and append it to the array
-        new_level = manager.Level(g, i, GetRandomName(), [], [], [])
+        new_level = Level(g, i, GetRandomName(), [], [], [])
+        mnew_level = manager.Namespace()
+        mnew_level.data = new_level
         levels.append(new_level)
+        mlevels.append(mnew_level)
         # initialize Rooms and put them in our level too
         for i in range(1, num_rooms + 1):
-            new_room = manager.Room(g, i, "Room", new_level, None, None, 0)
+            new_room = Room(g, i, "Room", new_level, None, None, 0)
+            mnew_room = manager.Namespace()
+            mnew_room.data = new_room
             new_level.add_room(new_room)
+            mnew_level.add_room(mnew_room)
             rooms.append(new_room)
+            mrooms.append(mnew_room)
             un_occ_m.append(new_room)
+            mun_occ_m.append(mnew_room)
             un_occ_g.append(new_room)
+            mun_occ_g.append(mnew_room)
     # initialize Gamers in level 1
     for i in range(1, num_gamers + 1):
-        new_gamer = manager.Gamer(g, i, "Gamer")
+        new_gamer = Gamer(g, i, "Gamer")
         gamers.append(new_gamer)
         levels[0].add_gamer(new_gamer)
+        new_gamer.set_level(levels[0])
+
+        mnew_gamer = manager.Namespace()
+        mnew_gamer.data = new_gamer
+        mgamers.append(mnew_gamer)
+        mlevels[0].add_gamer(mnew_gamer)
+        mnew_gamer.set_level(mlevels[0])
     
     # initialize Miners
     for i in range(1, num_miners + 1):
-        miners.append(manager.Miner(g, i, "Miner"))
+        new_miner = Miner(g, i, "Miner")
+        miners.append(new_miner)
+
+        mnew_miner = manager.Namespace()
+        mminers.append(mnew_miner)
+
     g.set_levels(levels)
     g.set_rooms(rooms)
     g.set_gamers(gamers)
@@ -75,7 +122,17 @@ def NewGame(num_levels, num_rooms, num_gamers, num_miners):
     g.set_un_occ_m(un_occ_m)
     g.set_occ_g(occ_g)
     g.set_un_occ_g(un_occ_g)
-    return g
+
+    mg.set_levels(mlevels)
+    mg.set_rooms(mrooms)
+    mg.set_gamers(mgamers)
+    mg.set_miners(mminers)
+    mg.set_occ_m(mocc_m)
+    mg.set_un_occ_m(mun_occ_m)
+    mg.set_occ_g(mocc_g)
+    mg.set_un_occ_g(mun_occ_g)
+
+    return (mg, g)
 
 
 def AnimateGame(game):
@@ -188,7 +245,7 @@ def draw_game(game, screen):
             gamer.set_coins(555)
             x_min = line_x + 20
             x_max = 695
-            level = game.level_from_gamer(gamer)
+            level = gamer.get_level()
             y_min = level.get_id() * (LEVEL_HEIGHT + 10 + 10)
             circle_center = (x_min + 25*j, y_min + 15)
             text = str(gamer.get_id())

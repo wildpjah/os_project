@@ -5,8 +5,8 @@ import asyncio
 import sys
 
 class Gamer(Person):
-    def __init__(self, game, id, name, coins=0, room=None,):
-        super().__init__(game, id, name, coins, room)
+    def __init__(self, game, id, name, coins=0, level=0, room=None):
+        super().__init__(game, id, name, coins, level, room)
         self.time = 10
 
     async def enter_room(self, room):
@@ -30,7 +30,7 @@ class Gamer(Person):
 
     def find_room(self):
         un_occ = self.game.get_un_occ_g()
-        level = self.game.level_from_gamer(self)
+        level = self.level
         rooms = (level).get_rooms()
         options = []
         for room in rooms:
@@ -70,7 +70,7 @@ class Gamer(Person):
         g = self.game
         if self.coins >= 20:
             # did we just win the last level?
-            level = g.level_from_gamer(self)
+            level = self.level
             all_levels = g.get_levels()
             num_l = len(g.get_levels())
             if level == all_levels[num_l-1]:
@@ -88,6 +88,7 @@ class Gamer(Person):
                 level_gamers = new_level.get_gamers()
                 level_gamers.append(self)
                 new_level.set_gamers(level_gamers)
+                self.level=new_level
                 print("Gamer" + str(self.get_id()) + " Leveled up! Is now Level " + str(new_level.get_id()))
 
 

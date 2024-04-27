@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from .Game import Game
 class Person(ABC):
-    def __init__(self, game, id, name, coins=0, room=None):
+    def __init__(self, game, id, name, coins=0, level=None, room=None):
         self.id = id
         self.name = name
         self.coins = coins
@@ -44,3 +44,8 @@ class Person(ABC):
     
     def add_coins(self, coins):
         self.coins = self.coins + coins
+    
+    def get_level(self):
+        return self.level
+    def set_level(self, level):
+        self.level = level

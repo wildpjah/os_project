@@ -174,17 +174,16 @@ async def ThreadingTest9():
 async def AnimationTest1():
     #initialize game
     random.seed()
-    g = hf.NewGame(10,3,10,20)
+    mg, g = hf.NewGame(10,3,10,20)
 
     gamers = g.get_gamers()
     miners = g.get_miners()
     tasks = []
     g.get_rooms()[3].add_coins(6)
 
-    pygame_process = multiprocessing.Process(target=hf.AnimateGame, args=(g,))
+    pygame_process = multiprocessing.Process(target=hf.AnimateGame, args=(mg,))
     pygame_process.start()
-    pygame_process.join()
-    g.get_rooms()[4].add_coins(6)
+    
     
     for miner in miners:
         tasks.append(asyncio.create_task(miner.loop_for_t(500)))
