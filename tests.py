@@ -187,19 +187,22 @@ async def AnimationTest1():
 
 
     g.get_rooms()[3].add_coins(6)
+    await miners[1].enter_room(g.get_rooms()[3])
+    mg.data = g
     pygame_process = multiprocessing.Process(target=hf.AnimateGame, args=(mg,))
     pygame_process.start()
     
     
     for miner in miners:
-        tasks.append(asyncio.create_task(miner.loop_for_t(500)))
+        tasks.append(asyncio.create_task(miner.loop_for_t(50000000000)))
     for gamer in gamers:
-        tasks.append(asyncio.create_task(gamer.loop_for_t(500)))
+        tasks.append(asyncio.create_task(gamer.loop_for_t(5000000000)))
 
     random.shuffle(tasks)
     # Wait for all tasks to complete
     await asyncio.gather(*tasks)
     print("Game Complete")
+    pygame_process.join()
 
 
 

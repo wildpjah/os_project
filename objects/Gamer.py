@@ -4,11 +4,12 @@ import random
 import asyncio
 import sys
 from .GameChangeEvent import GameChangeEvent
+import time
 
 class Gamer(Person):
     def __init__(self, game, id, name, coins=0, level=0, room=None):
         super().__init__(game, id, name, coins, level, room)
-        self.time = 10
+        self.TIME = 50
 
     async def enter_room(self, room):
         old_room = self.room
@@ -27,7 +28,7 @@ class Gamer(Person):
             if room not in self.game.un_occ_g:
                 pass
             self.game.rm_un_occ_g(room)
-            await asyncio.sleep(1/100)
+            await asyncio.sleep(self.TIME*1/100)
 
     def find_room(self):
         un_occ = self.game.get_un_occ_g()
@@ -45,17 +46,19 @@ class Gamer(Person):
         r = self.room
         delay = 0
         if self.room != None:
-            c = self.room.get_coins()
+            c = r.get_coins()
             if c <=10:
                 self.add_coins(c)
                 r.set_coins(0)
                 delay = c
             else:
-                c = 10
                 self.add_coins(10)
                 delay = 10
                 r.set_coins(c-10)
-        await asyncio.sleep(delay/100)
+        start = time.time()
+        await asyncio.sleep(self.TIME*delay/100)
+        end = time.time()
+        sys.stdout.write("Gamer " + str(self.get_id()) + " execution COLLECT waited " + str(end-start) + " seconds\n")
 
     async def leave_room(self):
         r = self.room
@@ -63,7 +66,7 @@ class Gamer(Person):
         self.game.rm_occ_g(r)
         self.game.add_un_occ_g(r)
         self.room = None
-        await asyncio.sleep(1/100)
+        await asyncio.sleep(self.TIME*1/100)
 
 
     def level_up(self):
@@ -136,7 +139,7 @@ class Gamer(Person):
         sys.stdout.write(str(i) + "\n")
 
     async def loop_for_win(self):
-        await asyncio.sleep(2)
+        await asyncio.sleep(self.TIME*2)
         while(self.game.check_win() == False):
             room = self.find_room()
             if room is not None:
@@ -144,17 +147,17 @@ class Gamer(Person):
                     await self.enter_room(room)
                     await self.collect()
                     await self.leave_room()
-            await asyncio.sleep(.5)
+            await asyncio.sleep(self.TIME*.5)
             self.level_up()
 
     async def loop_one(self):
-        await asyncio.sleep(2)
-        await asyncio.sleep(0)
+        await asyncio.sleep(self.TIME*2)
+        await asyncio.sleep(self.TIME*0)
         room = self.find_room()
         if room is not None:
             async with room.get_g_lock():
                 await self.enter_room(room)
                 await self.collect()
                 await self.leave_room()
-        await asyncio.sleep(.5)
+        await asyncio.sleep(self.TIME*.5)
         self.level_up()

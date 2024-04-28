@@ -96,6 +96,9 @@ def AnimateGame(game):
     pygame.display.set_caption("Miner Game")
     count = 0
     while running:
+        if game is None:
+            pygame.quit()
+            break
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -174,9 +177,8 @@ def draw_game(game, screen):
             #Draw gamers
             if gamer.get_room() is not None:
                 #Draw in a room
-                gamer.set_coins(100000)
                 room = gamer.get_room()
-                x = 45 + (room.get_id() * ROOM_WIDTH + 10) + 20
+                x = ((3-(room.get_id()%3)) * (ROOM_WIDTH + 10)) - 80
                 y = 60 + i*(LEVEL_HEIGHT)
                 circle_center = (x, y)
                 text = str(gamer.get_id())
@@ -186,21 +188,18 @@ def draw_game(game, screen):
                 #Actually drawing
                 pygame.draw.circle(screen, RED, circle_center, 10)
                 screen.blit(text_surface, text_rect)
-                pass
             else:
                 #Put in waiting area
-                gamer.set_coins(100000000)
                 waiting.append(gamer)
             j=j+1
         j=0
         for gamer in waiting:
             #Draw all waiting gamers
-            gamer.set_coins(555)
             x_min = line_x + 20
             x_max = 695
             level = gamer.get_level()
-            y_min = level.get_id() * (LEVEL_HEIGHT + 10 + 10)
-            circle_center = (x_min + 25*j, y_min + 15)
+            y_min = (level.get_id() * LEVEL_HEIGHT) + 10
+            circle_center = (x_min + (25*j), y_min + 15)
             text = str(gamer.get_id())
             text_surface = font.render(text, True, BLACK)
             text_rect = text_surface.get_rect()
@@ -214,8 +213,35 @@ def draw_game(game, screen):
     for miner in game.get_miners():
         if miner.get_room() is not None:
             # Draw miner in room
-            pass
+            room = miner.get_room()
+            x = ((3-(room.get_id()%3)) * (ROOM_WIDTH + 10)) - 40
+            level = room.get_level().get_id()
+            y = 60 + ((level)*LEVEL_HEIGHT)
+            circle_center = (x, y)
+            text = str(miner.get_id())
+            text_surface = font.render(text, True, BLACK)
+            text_rect = text_surface.get_rect()
+            text_rect.center = circle_center
+            #Actually drawing
+            pygame.draw.circle(screen, GREEN, circle_center, 10)
+            screen.blit(text_surface, text_rect)
         else:
             waiting.append(miner)
         #Draw miner - note: some miners may not be in a room. There needs to be a space they can wait that's not a level.
-
+        j=0
+        for miner in waiting:
+            x_min = 25
+            y_min = 25
+            if j < 10:
+                circle_center = (x_min + 25*j, y_min + 15)
+            else:
+                c = j-10
+                circle_center = (x_min + 25*c, y_min + 50)
+            text = str(miner.get_id())
+            text_surface = font.render(text, True, BLACK)
+            text_rect = text_surface.get_rect()
+            text_rect.center = circle_center
+            #Actually drawing
+            pygame.draw.circle(screen, GREEN, circle_center, 10)
+            screen.blit(text_surface, text_rect)
+            j = j + 1

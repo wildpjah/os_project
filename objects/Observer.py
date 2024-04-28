@@ -53,7 +53,7 @@ class Observer:
                 if room.get_id() == room_id:
                     new_room = room
                     break
-            new_miner = Miner(g, miner_dict["id"], miner_dict["name"], miner_dict["coins"], new_room)
+            new_miner = Miner(g, miner_dict["id"], miner_dict["name"], miner_dict["coins"], 0, new_room)
             new_miners.append(new_miner)
             if new_room is not None:
                 new_room.set_miner(new_miner)

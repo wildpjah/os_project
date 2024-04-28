@@ -4,10 +4,13 @@ import random
 import asyncio
 import sys
 from .GameChangeEvent import GameChangeEvent
+import time
+from scipy.stats import skewnorm
 
 class Miner(Person):
     def __init__(self, game, id, name, coins=0, level=None, room=None):
         super().__init__(game, id, name, coins, level, room)
+        self.TIME = 50
 
 
     async def enter_room(self, room):
@@ -22,7 +25,10 @@ class Miner(Person):
             self.game.add_occ_m(room)
             self.game.rm_un_occ_m(room)
             self.level = room.get_level()
-            await asyncio.sleep(1/100)
+            start = time.time()
+            await asyncio.sleep(self.TIME*1/100)
+            end = time.time()
+            sys.stdout.write("Miner " + str(self.get_id()) + " execution ENTER WAITED " + str(end-start) + " seconds\n")
     def find_room(self):
         options = self.game.get_un_occ_m()
         if options == []:
@@ -36,7 +42,7 @@ class Miner(Person):
         self.game.add_un_occ_m(r)
         self.room = None
         self.level = None
-        await asyncio.sleep(1/100)
+        await asyncio.sleep(self.TIME*1/100)
 
 
     def mine_coins(self):
@@ -45,8 +51,8 @@ class Miner(Person):
     async def drop_coins(self):
         self.mine_coins()
         self.room.add_coins(self.coins)
+        await asyncio.sleep(self.TIME*self.get_coins()/1000)
         self.set_coins(0)
-        await asyncio.sleep(self.get_coins()/1000)
 
 
     async def loop_for_t(self, t):
@@ -91,7 +97,7 @@ class Miner(Person):
                 await self.enter_room(room)
                 await self.drop_coins()
                 await self.leave_room()
-            await asyncio.sleep(.5)
+            await asyncio.sleep(self.TIME*.5)
 
     async def loop_one(self):
         room = self.find_room()
@@ -99,4 +105,4 @@ class Miner(Person):
             await self.enter_room(room)
             await self.drop_coins()
             await self.leave_room()
-        await asyncio.sleep(.5)
+        await asyncio.sleep(self.TIME*.5)

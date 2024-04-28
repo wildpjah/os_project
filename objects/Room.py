@@ -36,24 +36,18 @@ class Room():
 
     def set_id(self, id):
         self.id = id
-        ()
     def set_name(self, name):
         self.name = name
-        ()
     def set_miner(self, miner):
         self.miner = miner
-        ()
     def set_gamer(self, gamer):
         self.gamer = gamer
-        ()
     def set_coins(self, coins):
         self.coins = coins
-        ()
 
 
     def add_coins(self, coins):
         self.coins += coins
-        ()
 
 
     def __str__(self):
