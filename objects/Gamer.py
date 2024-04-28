@@ -3,6 +3,7 @@ from .Person import Person
 import random
 import asyncio
 import sys
+from .GameChangeEvent import GameChangeEvent
 
 class Gamer(Person):
     def __init__(self, game, id, name, coins=0, level=0, room=None):
@@ -109,11 +110,21 @@ class Gamer(Person):
             # This keeps each room locked as long as the gamer is in it
             if r is not None:
                 async with r.get_g_lock():
+                    sys.stdout.write("Gamer " + str(self.get_id()) + " execution " + str(i) + " LOCK\n")
+                    self.game.notify_observers()
                     await self.enter_room(r)
+                    sys.stdout.write("Gamer " + str(self.get_id()) + " execution " + str(i) + " ENTER\n")
+                    self.game.notify_observers()
                     await self.collect()
+                    sys.stdout.write("Gamer " + str(self.get_id()) + " execution " + str(i) + " COLLECT\n")
+                    self.game.notify_observers()
                     await self.leave_room()
+                    sys.stdout.write("Gamer " + str(self.get_id()) + " execution " + str(i) + " LEAVE\n")
+                    self.game.notify_observers()
                 end = self.coins
                 self.level_up()
+                sys.stdout.write("Gamer " + str(self.get_id()) + " execution " + str(i) + " LEVEL UP CHECK\n")
+                self.game.notify_observers()
                 change = end-start
                 #Note that change is before level-up
                 sys.stdout.write("Gamer " + str(self.get_id()) + " execution " + str(i) + ". Gained " + str(change) + " coins\n")

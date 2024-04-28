@@ -3,6 +3,7 @@ from objects.Gamer import Gamer
 from objects.Miner import Miner
 from objects.Room import Room
 from objects.Level import Level
+from objects.Observer import Observer
 import helper_functions as hf
 import random
 import threading
@@ -179,8 +180,13 @@ async def AnimationTest1():
     gamers = g.get_gamers()
     miners = g.get_miners()
     tasks = []
-    g.get_rooms()[3].add_coins(6)
+    observer = Observer(mg)
 
+    # Register the observer with the Game instance
+    g.register_observer(observer)
+
+
+    g.get_rooms()[3].add_coins(6)
     pygame_process = multiprocessing.Process(target=hf.AnimateGame, args=(mg,))
     pygame_process.start()
     
@@ -195,12 +201,6 @@ async def AnimationTest1():
     await asyncio.gather(*tasks)
     print("Game Complete")
 
-    # # Initialize Pygame
-    # pygame.init()
-
-    # # Set up the display
-    # screen = pygame.display.set_mode((800, 600))
-    # pygame.display.set_caption("Pygame Drawing Example")
 
 
 # Threading Testing!

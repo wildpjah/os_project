@@ -1,6 +1,7 @@
 from .Game import Game
 import asyncio
 from .Level import Level
+from .GameChangeEvent import GameChangeEvent
 class Room():
 
     def __init__(self, game, id, name, level, miner=None, gamer=None, coins=0):
@@ -12,6 +13,7 @@ class Room():
         self.game = game
         self.m_lock = asyncio.Lock()
         self.g_lock = asyncio.Lock()
+        self.level = level
     
     def get_id(self):
         return self.id
@@ -29,21 +31,29 @@ class Room():
         return self.m_lock
     def get_g_lock(self):
         return self.g_lock
+    def get_level(self):
+        return self.level
 
     def set_id(self, id):
         self.id = id
+        ()
     def set_name(self, name):
         self.name = name
+        ()
     def set_miner(self, miner):
         self.miner = miner
+        ()
     def set_gamer(self, gamer):
         self.gamer = gamer
+        ()
     def set_coins(self, coins):
         self.coins = coins
+        ()
 
 
     def add_coins(self, coins):
         self.coins += coins
+        ()
 
 
     def __str__(self):
@@ -71,3 +81,15 @@ class Room():
             "\ngamer in room: " + str(m_name) + \
             "\ncoins in room: " + str(self.coins)
         return output
+
+    def deconstruct(self):
+        if self.miner is not None:
+            miner_id = self.miner.get_id()
+        else:
+            miner_id = None
+        if self.gamer is not None:
+            gamer_id = self.gamer.get_id()
+        else:
+            gamer_id = None
+        dict = {"id":self.get_id(), "name":self.get_name(), "level":self.get_level().get_id(), "miner":miner_id, "gamer":gamer_id, "coins":self.get_coins()}
+        return dict

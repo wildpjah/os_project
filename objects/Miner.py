@@ -3,10 +3,11 @@ from .Person import Person
 import random
 import asyncio
 import sys
+from .GameChangeEvent import GameChangeEvent
 
 class Miner(Person):
-    def __init__(self, game, id, name, coins=0, room=None):
-        super().__init__(game, id, name, coins, room)
+    def __init__(self, game, id, name, coins=0, level=None, room=None):
+        super().__init__(game, id, name, coins, level, room)
 
 
     async def enter_room(self, room):
@@ -20,6 +21,7 @@ class Miner(Person):
             room.set_miner(self)
             self.game.add_occ_m(room)
             self.game.rm_un_occ_m(room)
+            self.level = room.get_level()
             await asyncio.sleep(1/100)
     def find_room(self):
         options = self.game.get_un_occ_m()
@@ -33,6 +35,7 @@ class Miner(Person):
         self.game.rm_occ_m(r)
         self.game.add_un_occ_m(r)
         self.room = None
+        self.level = None
         await asyncio.sleep(1/100)
 
 
@@ -60,9 +63,17 @@ class Miner(Person):
             if room is not None:
                 async with room.get_m_lock():
                     start = room.get_coins()
+                    sys.stdout.write("Miner " + str(self.get_id()) + " execution " + str(i) + "LOCK ROOM " + str(room.get_id()) + "Level " + str(self.game.level_from_room(room).get_id()) + "\n")
+                    self.game.notify_observers()
                     await self.enter_room(room)
+                    sys.stdout.write("Miner " + str(self.get_id()) + " execution " + str(i) + " ENTER\n")
+                    self.game.notify_observers()
                     await self.drop_coins()
+                    sys.stdout.write("Miner " + str(self.get_id()) + " execution " + str(i) + " DROP\n")
+                    self.game.notify_observers()
                     await self.leave_room()
+                    sys.stdout.write("Miner " + str(self.get_id()) + " execution " + str(i) + " LEAVE\n")
+                    self.game.notify_observers()
                 end = room.get_coins()
                 change = end-start
                 sys.stdout.write("Miner " + str(self.get_id()) + " execution " + str(i) + ". Dropped " + str(change) + " coins in Level: " + str(self.game.level_from_room(room).get_id()) + " Room: " + str(room.get_id()) + "\n")
