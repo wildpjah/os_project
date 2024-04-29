@@ -54,22 +54,36 @@ def main2():
 
 
 async def main():
+    #initialize game
     random.seed()
-    g = hf.NewGame(10,3,10,20)
+    mg, g = hf.NewGame(10,3,10,20)
+
     gamers = g.get_gamers()
     miners = g.get_miners()
     tasks = []
+    observer = Observer(mg)
 
-    # Create tasks for miners and gamers
+    # Register the observer with the Game instance
+    g.register_observer(observer)
+
+
+    g.get_rooms()[3].add_coins(6)
+    await miners[1].enter_room(g.get_rooms()[3])
+    mg.data = g
+    pygame_process = multiprocessing.Process(target=hf.AnimateGame, args=(mg,))
+    pygame_process.start()
+    
+    
     for miner in miners:
-        tasks.append(asyncio.create_task(miner.loop_for_win()))
+        tasks.append(asyncio.create_task(miner.loop_for_t(50000000000)))
     for gamer in gamers:
-        tasks.append(asyncio.create_task(gamer.loop_for_win()))
+        tasks.append(asyncio.create_task(gamer.loop_for_t(5000000000)))
 
     random.shuffle(tasks)
     # Wait for all tasks to complete
     await asyncio.gather(*tasks)
     print("Game Complete")
+    pygame_process.join()
 
 if __name__ == "__main__":
     asyncio.run(main())
